@@ -16,20 +16,30 @@ class PokemonCard extends StatefulWidget {
 
 class _PokemonCardState extends State<PokemonCard> {
   PaletteGenerator? _paletteGenerator;
+  bool _mounted = false;
 
   @override
   void initState() {
     super.initState();
+    _mounted = true;
     _generatePalette();
+  }
+
+  @override
+  void dispose() {
+    _mounted = false;
+    super.dispose();
   }
 
   Future<void> _generatePalette() async {
     final PaletteGenerator paletteGenerator =
         await PaletteGenerator.fromImageProvider(
             NetworkImage(widget.pokemon.img));
-    setState(() {
-      _paletteGenerator = paletteGenerator;
-    });
+    if (_mounted) {
+      setState(() {
+        _paletteGenerator = paletteGenerator;
+      });
+    }
   }
 
   @override
