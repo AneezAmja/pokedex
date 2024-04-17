@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:test_app/poke_detailed.dart';
@@ -13,7 +15,7 @@ class PokemonCard extends StatefulWidget {
 }
 
 class _PokemonCardState extends State<PokemonCard> {
-  late PaletteGenerator _paletteGenerator;
+  PaletteGenerator? _paletteGenerator;
 
   @override
   void initState() {
@@ -32,7 +34,7 @@ class _PokemonCardState extends State<PokemonCard> {
 
   @override
   Widget build(BuildContext context) {
-    Color? bgColor = _paletteGenerator.dominantColor?.color;
+    Color? bgColor = _paletteGenerator?.dominantColor?.color;
     return Card(
       color: bgColor ?? const Color(0xffcddaef),
       elevation: 5.0,
@@ -61,15 +63,13 @@ class _PokemonCardState extends State<PokemonCard> {
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'Inter',
                         color: Color(0xffefeff1),
                         shadows: [
                           Shadow(
-                            offset: Offset(
-                                2.0, 2.0), // Specify the offset of the shadow
-                            blurRadius:
-                                3.0, // Specify the blur radius of the shadow
-                            color:
-                                Colors.black, // Specify the color of the shadow
+                            offset: Offset(0, 2.0),
+                            blurRadius: 5.0,
+                            color: Colors.black54,
                           ),
                         ],
                       ),
@@ -88,20 +88,41 @@ class _PokemonCardState extends State<PokemonCard> {
                         children: widget.pokemon.type
                             .map(
                               (type) => Container(
-                                width: 60,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 10.0),
-                                margin: const EdgeInsets.only(bottom: 4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(9.0),
-                                  color: Colors.grey[300],
-                                ),
-                                child: Text(
-                                  type,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(fontSize: 10),
-                                ),
-                              ),
+                                  width: 60,
+                                  margin: const EdgeInsets.only(bottom: 4),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(6),
+                                      child: BackdropFilter(
+                                          filter: ImageFilter.blur(
+                                              sigmaX: 1.0, sigmaY: 1.0),
+                                          child: Container(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 3.0, 0, 3.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(6.0),
+                                              border: Border.all(
+                                                color: Colors.grey[400]!
+                                                    .withOpacity(
+                                                        0.2), // Outline color
+                                                width: 1.0, // Outline width
+                                              ),
+                                              color: Colors.grey[400]
+                                                  ?.withOpacity(0.4),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                type,
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontSize: 10,
+                                                  fontFamily: 'Inter',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xffefeff1),
+                                                ),
+                                              ),
+                                            ),
+                                          )))),
                             )
                             .toList(),
                       ),
