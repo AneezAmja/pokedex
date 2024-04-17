@@ -52,10 +52,17 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         title: const Column(
           children: [
-            Text("Pokedex"),
+            Text(
+              "Pokedex",
+              style:
+                  TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.bold),
+            ),
             Text(
               'Gotta catch em all!',
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Inter',
+              ),
             ),
           ],
         ),
