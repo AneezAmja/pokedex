@@ -22,7 +22,7 @@ class _PokemonCardState extends State<PokemonCard> {
         ),
       ),
       child: Card(
-        color: Colors.red[100],
+        color: const Color(0xffcddaef),
         margin: const EdgeInsets.all(0),
         child: Column(
           children: [
