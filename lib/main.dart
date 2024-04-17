@@ -62,13 +62,17 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Container(
         color: const Color(0xffefeff1),
-        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
         child: FutureBuilder<Pokedex>(
           future: pokedexFuture,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return GridView.count(
                 crossAxisCount: 2,
+                crossAxisSpacing: 8.0, // Spacing between col
+                mainAxisSpacing: 8.0, // Spacing between rows
+                childAspectRatio: 5 / 4,
+                shrinkWrap: true,
                 children: snapshot.data!.pokemon
                     .map((poke) => PokemonCard(pokemon: poke))
                     .toList(),
