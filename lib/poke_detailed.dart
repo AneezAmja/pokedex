@@ -44,87 +44,83 @@ class PokeInfo extends StatelessWidget {
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 10.0),
-              Column(
+              Text(
+                "Height: ${pokemon.height}",
+                style: const TextStyle(fontSize: 16),
+                textAlign: TextAlign.left,
+              ),
+              const SizedBox(height: 10.0),
+              Text(
+                "Weight: ${pokemon.weight}",
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "Height: ${pokemon.height}",
-                    style: const TextStyle(fontSize: 16),
+                  const Text(
+                    "Weakness: ",
+                    style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.left,
                   ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "Weight: ${pokemon.weight}",
-                    style: const TextStyle(fontSize: 16),
+                  Wrap(
+                    spacing: 8.0,
+                    children: pokemon.weaknesses
+                        .map(
+                          (type) => Container(
+                            width: 60,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 10.0),
+                            margin: const EdgeInsets.only(bottom: 4),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(9.0),
+                              color: Colors.grey[300],
+                            ),
+                            child: Text(
+                              type,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Weakness: ",
-                        style: TextStyle(fontSize: 16),
-                        textAlign: TextAlign.left,
-                      ),
-                      Wrap(
-                        spacing: 8.0,
-                        children: pokemon.weaknesses
-                            .map(
-                              (type) => Container(
-                                width: 60,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 10.0),
-                                margin: const EdgeInsets.only(bottom: 4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(9.0),
-                                  color: Colors.grey[300],
-                                ),
-                                child: Text(
-                                  type,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(fontSize: 10),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
+                ],
+              ),
+              const SizedBox(height: 10.0),
+              Text(
+                "Next Evolution: ${pokemon.nextEvolution != null ? pokemon.nextEvolution!.map((evolution) => evolution.name).join(', ') : 'None'}",
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Type: ",
+                    style: TextStyle(fontSize: 16),
                   ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "Next Evolution: ${pokemon.nextEvolution != null ? pokemon.nextEvolution!.map((evolution) => evolution.name).join(', ') : 'None'}",
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Type: ",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Wrap(
-                        spacing: 8.0,
-                        children: pokemon.type
-                            .map(
-                              (type) => Container(
-                                width: 60,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 10.0),
-                                margin: const EdgeInsets.only(bottom: 4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(9.0),
-                                  color: Colors.grey[300],
-                                ),
-                                child: Text(
-                                  type,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(fontSize: 10),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
+                  Wrap(
+                    spacing: 8.0,
+                    children: pokemon.type
+                        .map(
+                          (type) => Container(
+                            width: 60,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 10.0),
+                            margin: const EdgeInsets.only(bottom: 4),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(9.0),
+                              color: Colors.grey[300],
+                            ),
+                            child: Text(
+                              type,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ],
               ),
