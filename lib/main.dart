@@ -4,6 +4,8 @@ import 'package:test_app/poke_detailed.dart';
 import 'package:test_app/pokedex.dart';
 import 'dart:convert';
 
+import 'package:test_app/pokemon_card.dart';
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -63,54 +65,11 @@ class _MyHomePageState extends State<MyHomePage> {
         future: pokedexFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.pokemon.length,
-              itemBuilder: (context, index) {
-                final poke = snapshot.data!.pokemon[index];
-                return InkWell(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PokeInfo(pokemon: poke),
-                    ),
-                  ),
-                  child: Card(
-                    color: Colors.red[100],
-                    margin: const EdgeInsets.all(0),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 100.0,
-                          height: 100.0,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(poke.img),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            "#${poke.id} - ${poke.name}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: poke.type
-                              .map((type) => FilterChip(
-                                    label: Text(type),
-                                    onSelected: (b) {},
-                                  ))
-                              .toList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+            return GridView.count(
+              crossAxisCount: 2,
+              children: snapshot.data!.pokemon
+                  .map((poke) => PokemonCard(pokemon: poke))
+                  .toList(),
             );
           } else if (snapshot.hasError) {
             return Center(
