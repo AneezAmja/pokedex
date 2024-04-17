@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:test_app/poke_detailed.dart';
 import 'package:test_app/pokedex.dart';
 import 'dart:convert';
 
@@ -49,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xffd03056),
+        backgroundColor: const Color(0xffefeff1),
         centerTitle: true,
         title: const Column(
           children: [
@@ -61,24 +60,28 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: FutureBuilder<Pokedex>(
-        future: pokedexFuture,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return GridView.count(
-              crossAxisCount: 2,
-              children: snapshot.data!.pokemon
-                  .map((poke) => PokemonCard(pokemon: poke))
-                  .toList(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error fetching data: ${snapshot.error}'),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      body: Container(
+        color: const Color(0xffefeff1),
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: FutureBuilder<Pokedex>(
+          future: pokedexFuture,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return GridView.count(
+                crossAxisCount: 2,
+                children: snapshot.data!.pokemon
+                    .map((poke) => PokemonCard(pokemon: poke))
+                    .toList(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error fetching data: ${snapshot.error}'),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
     );
   }
