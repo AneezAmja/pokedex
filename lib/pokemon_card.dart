@@ -34,7 +34,7 @@ class _PokemonCardState extends State<PokemonCard> {
   Future<void> _generatePalette() async {
     final PaletteGenerator paletteGenerator =
         await PaletteGenerator.fromImageProvider(
-            NetworkImage(widget.pokemon.img));
+            NetworkImage(widget.pokemon.sprite));
     if (_mounted) {
       setState(() {
         _paletteGenerator = paletteGenerator;
@@ -95,7 +95,7 @@ class _PokemonCardState extends State<PokemonCard> {
                   children: [
                     Expanded(
                       child: Column(
-                        children: widget.pokemon.type
+                        children: widget.pokemon.types
                             .map(
                               (type) => Container(
                                   width: 60,
@@ -122,7 +122,7 @@ class _PokemonCardState extends State<PokemonCard> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                type,
+                                                type.name,
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
                                                   fontSize: 10,
@@ -142,7 +142,7 @@ class _PokemonCardState extends State<PokemonCard> {
                       height: 75.0,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(widget.pokemon.img),
+                          image: NetworkImage(widget.pokemon.sprite),
                           fit: BoxFit.cover,
                         ),
                       ),
