@@ -1,3 +1,4 @@
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_app/pokedex.dart';
@@ -38,10 +39,22 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<Pokedex> fetchData() async {
-    final response = await http.get(Uri.parse(
-        "https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json"));
+    final response = await http
+        .get(Uri.parse("https://pokeapi.co/api/v2/pokemon?limit=151"));
     final decodedJSON = jsonDecode(response.body);
-    return Pokedex.fromJson(decodedJSON);
+
+    List<Pokemon> pokemonList = [];
+
+    for (var pokemonData in decodedJSON['results']) {
+      final pokemonResponse = await http.get(Uri.parse(pokemonData['url']));
+      final pokemonJSON = jsonDecode(pokemonResponse.body);
+
+      // Creating pokemon object from the pased JSON response
+      Pokemon pokemon = Pokemon.fromJson(pokemonJSON);
+      pokemonList.add(pokemon);
+    }
+
+    return Pokedex(pokemon: pokemonList);
   }
 
   @override
