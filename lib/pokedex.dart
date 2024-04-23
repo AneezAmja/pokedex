@@ -20,105 +20,107 @@ class Pokedex {
 
 class Pokemon {
   final int id;
-  final String num;
   final String name;
-  final String img;
-  final List<String> type;
-  final String height;
-  final String weight;
-  final String candy;
-  final int? candyCount;
-  final String egg;
-  final String spawnChance;
-  final String avgSpawns;
-  final String spawnTime;
-  final List<double>? multipliers;
-  final List<String> weaknesses;
-  final List<NextEvolution>? nextEvolution;
+  final int height;
+  final int weight;
+  final String sprite;
+  final List<PokemonAbility> abilities;
+  final List<PokemonType> types;
+  final List<PokemonStat> stats;
 
   Pokemon({
     required this.id,
-    required this.num,
     required this.name,
-    required this.img,
-    required this.type,
     required this.height,
     required this.weight,
-    required this.candy,
-    this.candyCount,
-    required this.egg,
-    required this.spawnChance,
-    required this.avgSpawns,
-    required this.spawnTime,
-    this.multipliers,
-    required this.weaknesses,
-    this.nextEvolution,
+    required this.sprite,
+    required this.abilities,
+    required this.types,
+    required this.stats,
   });
 
   factory Pokemon.fromJson(Map<String, dynamic> json) {
+    List<dynamic> typesJson = json['types'];
+    List<PokemonType> parsedTypes = typesJson.map((typeJson) {
+      return PokemonType.fromJson(typeJson['type']);
+    }).toList();
+
+    List<dynamic> abilitiesJson = json['abilities'];
+    List<PokemonAbility> parsedAbilities = abilitiesJson.map((abilityJson) {
+      return PokemonAbility.fromJson(abilityJson['ability']);
+    }).toList();
+
+    List<dynamic> statsJson = json['stats'];
+    List<PokemonStat> parsedStats = (statsJson).map((statJson) {
+      return PokemonStat.fromJson(statJson);
+    }).toList();
+
     return Pokemon(
       id: json['id'],
-      num: json['num'],
       name: json['name'],
-      img: json['img'],
-      type: json['type'].cast<String>(),
       height: json['height'],
       weight: json['weight'],
-      candy: json['candy'],
-      candyCount: json['candy_count'] ?? 0,
-      egg: json['egg'],
-      spawnChance: json['spawn_chance'].toString(),
-      avgSpawns: json['avg_spawns'].toString(),
-      spawnTime: json['spawn_time'],
-      multipliers: json['multipliers']?.cast<double>(),
-      weaknesses: json['weaknesses'].cast<String>(),
-      nextEvolution: json['next_evolution'] != null
-          ? (json['next_evolution'] as List)
-              .map((v) => NextEvolution.fromJson(v))
-              .toList()
-          : null,
+      sprite: json['sprites']['front_default'],
+      abilities: parsedAbilities,
+      types: parsedTypes,
+      stats: parsedStats,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'num': num,
       'name': name,
-      'img': img,
-      'type': type,
       'height': height,
       'weight': weight,
-      'candy': candy,
-      'candy_count': candyCount,
-      'egg': egg,
-      'spawn_chance': spawnChance,
-      'avg_spawns': avgSpawns,
-      'spawn_time': spawnTime,
-      'multipliers': multipliers,
-      'weaknesses': weaknesses,
-      'next_evolution': nextEvolution?.map((v) => v.toJson()).toList(),
+      'sprite': sprite,
+      'abilities': abilities,
+      'types': types,
+      'stats': stats,
     };
   }
 }
 
-class NextEvolution {
-  final String num;
+class PokemonType {
   final String name;
 
-  NextEvolution({required this.num, required this.name});
+  PokemonType({
+    required this.name,
+  });
 
-  factory NextEvolution.fromJson(Map<String, dynamic> json) {
-    return NextEvolution(
-      num: json['num'],
+  factory PokemonType.fromJson(Map<String, dynamic> json) {
+    return PokemonType(
       name: json['name'],
     );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      'num': num,
-      'name': name,
-    };
+class PokemonAbility {
+  final String name;
+
+  PokemonAbility({
+    required this.name,
+  });
+
+  factory PokemonAbility.fromJson(Map<String, dynamic> json) {
+    return PokemonAbility(
+      name: json['name'],
+    );
+  }
+}
+
+class PokemonStat {
+  final int baseStat;
+  final String statName;
+  PokemonStat({
+    required this.baseStat,
+    required this.statName,
+  });
+
+  factory PokemonStat.fromJson(Map<String, dynamic> json) {
+    return PokemonStat(
+      baseStat: json['base_stat'],
+      statName: json['stat']['name'],
+    );
   }
 }
