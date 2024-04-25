@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:test_app/poke_detailed.dart';
 import 'package:test_app/pokedex.dart';
+import 'package:test_app/util/extensions.dart';
 
 class PokemonCard extends StatefulWidget {
   final Pokemon pokemon;
@@ -69,7 +70,7 @@ class _PokemonCardState extends State<PokemonCard> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
                     child: Text(
-                      widget.pokemon.name,
+                      widget.pokemon.name.capitalize(),
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
@@ -122,7 +123,7 @@ class _PokemonCardState extends State<PokemonCard> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                type.name,
+                                                type.name.capitalize(),
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
                                                   fontSize: 10,
