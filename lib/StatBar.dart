@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/util/extensions.dart';
 
 class StatBar extends StatelessWidget {
   final String label;
@@ -11,16 +12,21 @@ class StatBar extends StatelessWidget {
     required this.label,
     required this.barColour,
     required this.value,
-    this.maxValue = 100,
+    this.maxValue = 255,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      // crossAxisAlignment: CrossAxisAlignment.start,
+    String shortLabel = label == 'Special-attack'
+        ? 'Sp. Atk'
+        : label == 'Special-defense'
+            ? 'Sp. Def'
+            : label;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          '$shortLabel ($value)',
           style: const TextStyle(
             fontSize: 13,
             fontFamily: 'Inter',
@@ -28,6 +34,8 @@ class StatBar extends StatelessWidget {
             color: Colors.black45,
           ),
         ),
+        // const SizedBox(width: 8),
+        const SizedBox(height: 4),
         Container(
           height: 20,
           width: 100,
@@ -43,10 +51,10 @@ class StatBar extends StatelessWidget {
                   color: barColour,
                   borderRadius: BorderRadius.circular(3.0),
                 ),
-              )
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
