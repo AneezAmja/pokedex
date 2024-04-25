@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:test_app/StatBar.dart';
 import 'package:test_app/pokedex.dart';
+import 'package:test_app/util/conversions.dart';
 import 'package:test_app/util/extensions.dart';
+import 'package:http/http.dart' as http;
 
 class PokeInfo extends StatefulWidget {
   final Pokemon pokemon;
@@ -25,6 +29,7 @@ class _PokeInfoState extends State<PokeInfo> {
     _mounted = true;
 
     _generatePalette();
+    _fetchPokemonDescription();
   }
 
   @override
@@ -44,9 +49,32 @@ class _PokeInfoState extends State<PokeInfo> {
     }
   }
 
+  Future<void> _fetchPokemonDescription() async {
+    // Fetch description
+    final response = await http.get(Uri.parse(
+        "https://pokeapi.co/api/v2/pokemon-species/${widget.pokemon.id}/"));
+    final decodedJSON = jsonDecode(response.body);
+    final descriptions = decodedJSON['flavor_text_entries'];
+    final englishDescription = descriptions.firstWhere(
+      (entry) => entry['language']['name'] == 'en',
+      orElse: () => {'flavor_text': 'No description available'},
+    );
+    final descriptionText = englishDescription != null
+        ? englishDescription['flavor_text']
+        : 'No description available';
+
+    // Update Pokemon object with description
+    setState(() {
+      widget.pokemon.description = descriptionText;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Color? bgColor = _paletteGenerator?.dominantColor?.color;
+    final updatedDescriptionText =
+        widget.pokemon.description.replaceAll('\n', ' ').replaceAll('\f', ' ');
+    ; // API returns new line characters
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -77,18 +105,35 @@ class _PokeInfoState extends State<PokeInfo> {
             right: 0,
             height: MediaQuery.of(context).size.height / 3,
             child: Container(
-              padding: const EdgeInsets.only(left: 45),
+              padding: const EdgeInsets.only(left: 30.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.pokemon.name.capitalize(),
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black45,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.pokemon.name.capitalize(),
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black45,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 30.0),
+                        child: Text(
+                          "#${widget.pokemon.id.toString()}",
+                          style: const TextStyle(
+                            fontSize: 32,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black45,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   Wrap(
                     spacing: 8.0,
@@ -133,15 +178,27 @@ class _PokeInfoState extends State<PokeInfo> {
                   topRight: Radius.circular(30),
                 ),
               ),
-              padding: const EdgeInsets.only(top: 55.0, left: 55.0),
+              padding: const EdgeInsets.only(
+                  top: 55.0, left: 30.0, right: 30.0, bottom: 30.0),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            updatedDescriptionText,
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
+                        ),
+                      ),
+                    ]),
                     Row(
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(right: 30.0),
+                          padding: EdgeInsets.only(right: 8.0),
                           child: Text(
                             'Weight: ',
                             style: TextStyle(
@@ -151,7 +208,7 @@ class _PokeInfoState extends State<PokeInfo> {
                           ),
                         ),
                         Text(
-                          '${widget.pokemon.weight} Kg',
+                          '${widget.pokemon.weight / 10} kg / ${covertGramsIntoPounds(widget.pokemon.weight)} lbs',
                           style: const TextStyle(fontSize: 16.0),
                         ),
                       ],
@@ -159,7 +216,7 @@ class _PokeInfoState extends State<PokeInfo> {
                     Row(
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(right: 30.0),
+                          padding: EdgeInsets.only(right: 8.0),
                           child: Text(
                             'Height: ',
                             style: TextStyle(
@@ -169,7 +226,7 @@ class _PokeInfoState extends State<PokeInfo> {
                           ),
                         ),
                         Text(
-                          '${widget.pokemon.height} CM',
+                          '${widget.pokemon.height / 10} m / ${covertMetresIntoFeet(widget.pokemon.height)} ft',
                           style: const TextStyle(fontSize: 16.0),
                         ),
                       ],
@@ -177,7 +234,7 @@ class _PokeInfoState extends State<PokeInfo> {
                     Row(
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 8.0),
                           child: Text(
                             'Abilities: ',
                             style: TextStyle(
@@ -193,7 +250,7 @@ class _PokeInfoState extends State<PokeInfo> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(top: 7),
+                          padding: EdgeInsets.only(top: 8.0),
                           child: Text(
                             "Stats",
                             style: TextStyle(
@@ -268,7 +325,7 @@ class _PokeInfoState extends State<PokeInfo> {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                  right: 36.0), // Adjust spacing as needed
+                  right: 30.0), // Adjust spacing as needed
               child: statBars[i],
             ),
             statBars[i + 1],
