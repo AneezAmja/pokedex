@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:test_app/poke_detailed.dart';
 import 'package:test_app/pokedex.dart';
+import 'package:test_app/util/extensions.dart';
 
 class PokemonCard extends StatefulWidget {
   final Pokemon pokemon;
@@ -34,7 +35,7 @@ class _PokemonCardState extends State<PokemonCard> {
   Future<void> _generatePalette() async {
     final PaletteGenerator paletteGenerator =
         await PaletteGenerator.fromImageProvider(
-            NetworkImage(widget.pokemon.img));
+            NetworkImage(widget.pokemon.sprite));
     if (_mounted) {
       setState(() {
         _paletteGenerator = paletteGenerator;
@@ -69,7 +70,7 @@ class _PokemonCardState extends State<PokemonCard> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
                     child: Text(
-                      widget.pokemon.name,
+                      widget.pokemon.name.capitalize(),
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
@@ -95,7 +96,7 @@ class _PokemonCardState extends State<PokemonCard> {
                   children: [
                     Expanded(
                       child: Column(
-                        children: widget.pokemon.type
+                        children: widget.pokemon.types
                             .map(
                               (type) => Container(
                                   width: 60,
@@ -122,7 +123,7 @@ class _PokemonCardState extends State<PokemonCard> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                type,
+                                                type.name.capitalize(),
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
                                                   fontSize: 10,
@@ -142,7 +143,7 @@ class _PokemonCardState extends State<PokemonCard> {
                       height: 75.0,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(widget.pokemon.img),
+                          image: NetworkImage(widget.pokemon.sprite),
                           fit: BoxFit.cover,
                         ),
                       ),
