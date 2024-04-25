@@ -27,6 +27,7 @@ class Pokemon {
   final List<PokemonAbility> abilities;
   final List<PokemonType> types;
   final List<PokemonStat> stats;
+  String description;
 
   Pokemon({
     required this.id,
@@ -37,6 +38,7 @@ class Pokemon {
     required this.abilities,
     required this.types,
     required this.stats,
+    this.description = '',
   });
 
   factory Pokemon.fromJson(Map<String, dynamic> json) {
