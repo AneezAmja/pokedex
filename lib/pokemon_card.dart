@@ -138,13 +138,16 @@ class _PokemonCardState extends State<PokemonCard> {
                             .toList(),
                       ),
                     ),
-                    Container(
-                      width: 75.0,
-                      height: 75.0,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(widget.pokemon.sprite),
-                          fit: BoxFit.cover,
+                    Hero(
+                      tag: widget.pokemon.sprite,
+                      child: Container(
+                        width: 75.0,
+                        height: 75.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.pokemon.sprite),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
