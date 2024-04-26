@@ -19,15 +19,22 @@ class PokeInfo extends StatefulWidget {
   State<PokeInfo> createState() => _PokeInfoState();
 }
 
-class _PokeInfoState extends State<PokeInfo> {
+class _PokeInfoState extends State<PokeInfo> with TickerProviderStateMixin {
   PaletteGenerator? _paletteGenerator;
   bool _mounted = false;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     _mounted = true;
-
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+    _controller.forward();
     _generatePalette();
     _fetchPokemonDescription();
   }
@@ -35,6 +42,7 @@ class _PokeInfoState extends State<PokeInfo> {
   @override
   void dispose() {
     _mounted = false;
+    _controller.dispose();
     super.dispose();
   }
 
@@ -165,6 +173,7 @@ class _PokeInfoState extends State<PokeInfo> {
           ),
 /*------------------------------------------------------------------------------------------------------------- */
           /* Description section */
+
           Positioned(
             top: (MediaQuery.of(context).size.height / 2) - 100,
             left: 0,
@@ -181,94 +190,100 @@ class _PokeInfoState extends State<PokeInfo> {
               padding: const EdgeInsets.only(
                   top: 55.0, left: 30.0, right: 30.0, bottom: 30.0),
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            updatedDescriptionText,
+                child: FadeTransition(
+                  opacity: _animation,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Text(
+                                  updatedDescriptionText,
+                                  style: const TextStyle(fontSize: 16.0),
+                                ),
+                              ),
+                            ),
+                          ]),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: Text(
+                              'Weight: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '${widget.pokemon.weight / 10} kg / ${convertGramsIntoPounds(widget.pokemon.weight)} lbs',
                             style: const TextStyle(fontSize: 16.0),
                           ),
-                        ),
+                        ],
                       ),
-                    ]),
-                    Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(right: 8.0),
-                          child: Text(
-                            'Weight: ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0,
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: Text(
+                              'Height: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
                             ),
                           ),
-                        ),
-                        Text(
-                          '${widget.pokemon.weight / 10} kg / ${covertGramsIntoPounds(widget.pokemon.weight)} lbs',
-                          style: const TextStyle(fontSize: 16.0),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(right: 8.0),
-                          child: Text(
-                            'Height: ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0,
+                          Text(
+                            '${widget.pokemon.height / 10} m / ${convertMetresIntoFeet(widget.pokemon.height)} ft',
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: Text(
+                              'Abilities: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
                             ),
                           ),
-                        ),
-                        Text(
-                          '${widget.pokemon.height / 10} m / ${covertMetresIntoFeet(widget.pokemon.height)} ft',
-                          style: const TextStyle(fontSize: 16.0),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(right: 8.0),
-                          child: Text(
-                            'Abilities: ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0,
+                          _getAbilities(),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              "Stats",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black45,
+                              ),
                             ),
                           ),
-                        ),
-                        _getAbilities(),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            "Stats",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black45,
-                            ),
-                          ),
-                        ),
-                        _getBaseStats(),
-                      ],
-                    )
-                  ],
+                          _getBaseStats(),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
+
           /*------------------------------------------------------------------------------------------------------------- */
           /* Pokemon hero image */
           Hero(
