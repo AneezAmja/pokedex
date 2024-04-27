@@ -30,6 +30,10 @@ This Flutter application is a Pokedex, which allows pokemon fans to have their v
 
 * **lib:** central repository for your application's Dart codebase. Within this folder, you'll find the essential components that define your app's user interface, manage its state, and handle business logic.
 
+## Future features
+ - [ ] Add in evolutions in the pokemon detailed screen
+ - [ ] Allow users to favourite their pokemon
+ - [ ] Add in functionality to swipe onto next pokemon in the pokdex from the pokemon detailed screen
 
 ## Contributing
 
@@ -40,7 +44,6 @@ Contributions are very welcome. Please follow the below steps:
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
 
 ## Contact
 
