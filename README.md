@@ -3,7 +3,7 @@
 ## About The Project
 This Flutter application is a Pokedex, which allows pokemon fans to have their very own pokedex in their pockets! It allows  users to view information about various Pokemon.
 
-[![Thumbnail](https://github-production-user-asset-6210df.s3.amazonaws.com/22137055/326218990-adade3f5-eee3-495c-a5a7-b093623d7b84.jpg)](https://files.catbox.moe/z8t5uy.mp4)
+<img height="300" align="center" src="https://files.catbox.moe/1zci70.gif" alt="demo"/>
 
 ### Built With
 
